@@ -1,0 +1,67 @@
+set -e; for d in lib client src; do make -C ${d}; done
+make[1]: Entering directory '/home/travis/mosquitto/lib'
+make -C cpp
+make[2]: Entering directory '/home/travis/mosquitto/lib/cpp'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/travis/mosquitto/lib/cpp'
+make[1]: Leaving directory '/home/travis/mosquitto/lib'
+make[1]: Entering directory '/home/travis/mosquitto/client'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/travis/mosquitto/client'
+make[1]: Entering directory '/home/travis/mosquitto/src'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/travis/mosquitto/src'
+set -e; for d in lib client src; do make -C ${d} install; done
+make[1]: Entering directory '/home/travis/mosquitto/lib'
+make -C cpp
+make[2]: Entering directory '/home/travis/mosquitto/lib/cpp'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/travis/mosquitto/lib/cpp'
+install -d /usr/local/lib/
+install -s --strip-program=strip libmosquitto.so.1 /usr/local/lib/libmosquitto.so.1
+ln -sf libmosquitto.so.1 /usr/local/lib/libmosquitto.so
+install -d /usr/local/include/
+install mosquitto.h /usr/local/include/mosquitto.h
+make -C cpp install
+make[2]: Entering directory '/home/travis/mosquitto/lib/cpp'
+install -d /usr/local/lib/
+install -s --strip-program=strip libmosquittopp.so.1 /usr/local/lib/libmosquittopp.so.1
+ln -sf libmosquittopp.so.1 /usr/local/lib/libmosquittopp.so
+install -d /usr/local/include/
+install mosquittopp.h /usr/local/include/mosquittopp.h
+make[2]: Leaving directory '/home/travis/mosquitto/lib/cpp'
+make[1]: Leaving directory '/home/travis/mosquitto/lib'
+make[1]: Entering directory '/home/travis/mosquitto/client'
+install -d /usr/local/bin
+install -s --strip-program=strip mosquitto_pub /usr/local/bin/mosquitto_pub
+install -s --strip-program=strip mosquitto_sub /usr/local/bin/mosquitto_sub
+make[1]: Leaving directory '/home/travis/mosquitto/client'
+make[1]: Entering directory '/home/travis/mosquitto/src'
+install -d /usr/local/sbin
+install --strip-program=strip mosquitto /usr/local/sbin/mosquitto
+install -d /usr/local/include
+install mosquitto_plugin.h /usr/local/include/mosquitto_plugin.h
+install -d /usr/local/bin
+install -s --strip-program=strip mosquitto_passwd /usr/local/bin/mosquitto_passwd
+make[1]: Leaving directory '/home/travis/mosquitto/src'
+set -e; for d in man; do make -C ${d} install; done
+make[1]: Entering directory '/home/travis/mosquitto/man'
+install -d /usr/local/share/man/man8
+install -m 644 mosquitto.8 /usr/local/share/man/man8/mosquitto.8
+install -d /usr/local/share/man/man5
+install -m 644 mosquitto.conf.5 /usr/local/share/man/man5/mosquitto.conf.5
+install -d /usr/local/share/man/man1
+install -m 644 mosquitto_passwd.1 /usr/local/share/man/man1/mosquitto_passwd.1
+install -m 644 mosquitto_pub.1 /usr/local/share/man/man1/mosquitto_pub.1
+install -m 644 mosquitto_sub.1 /usr/local/share/man/man1/mosquitto_sub.1
+install -d /usr/local/share/man/man7
+install -m 644 mqtt.7 /usr/local/share/man/man7/mqtt.7
+install -m 644 mosquitto-tls.7 /usr/local/share/man/man7/mosquitto-tls.7
+install -d /usr/local/share/man/man3
+install -m 644 libmosquitto.3 /usr/local/share/man/man3/libmosquitto.3
+make[1]: Leaving directory '/home/travis/mosquitto/man'
+install -d /etc/mosquitto
+install -m 644 mosquitto.conf /etc/mosquitto/mosquitto.conf.example
+install -m 644 aclfile.example /etc/mosquitto/aclfile.example
+install -m 644 pwfile.example /etc/mosquitto/pwfile.example
+install -m 644 pskfile.example /etc/mosquitto/pskfile.example

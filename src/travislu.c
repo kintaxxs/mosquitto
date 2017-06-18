@@ -65,3 +65,14 @@ void travislu_get_client(struct mosquitto_db *db)
         count_by_sock = 0;
     _mosquitto_log_printf(NULL, MOSQ_LOG_INFO, "The client : %d", count_by_sock);
 }
+
+void travislu_get_waiting_queue_time(struct mosquitto_msg_store *store)
+{
+    struct timeval end;
+    float waiting_time;
+
+    gettimeofday(&end, NULL);
+
+    waiting_time = (1000000 * (end.tv_sec - store->store_time.tv_sec) + (end.tv_usec - store->store_time.tv_usec)) / (float)1000;
+    _mosquitto_log_printf(NULL, MOSQ_LOG_INFO, "Topic : %s , The waiting time : %fms", store->topic, waiting_time);
+}

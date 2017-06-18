@@ -24,6 +24,9 @@ Contributors:
 #include <send_mosq.h>
 #include <time_mosq.h>
 
+//travislu
+#include <sys/time.h>
+
 static int max_inflight = 20;
 static int max_queued = 100;
 #ifdef WITH_SYS_TREE
@@ -145,7 +148,7 @@ void mosquitto__db_msg_store_add(struct mosquitto_db *db, struct mosquitto_msg_s
 
 void mosquitto__db_msg_store_remove(struct mosquitto_db *db, struct mosquitto_msg_store *store)
 {
-    travislu_whereis("mosquitto__db_msg_store_remove");
+    //travislu_whereis("mosquitto__db_msg_store_remove");
 	int i;
 
 	if(store->prev){
@@ -190,6 +193,11 @@ void mosquitto__db_msg_store_deref(struct mosquitto_db *db, struct mosquitto_msg
 {
 	(*store)->ref_count--;
 	if((*store)->ref_count == 0){
+        //travislu
+        char *pch;
+        pch = strstr((*store)->topic, "$SYS");
+        if(!pch)
+            travislu_get_waiting_queue_time(*store);
 		mosquitto__db_msg_store_remove(db, *store);
 		*store = NULL;
 	}
@@ -549,6 +557,10 @@ int mqtt3_db_message_store(struct mosquitto_db *db, const char *source, uint16_t
 	temp->mid = 0;
 	temp->qos = qos;
 	temp->retain = retain;
+
+    //travislu
+    gettimeofday(&temp->store_time, NULL);
+
 	if(topic){
 		temp->topic = _mosquitto_strdup(topic);
 		if(!temp->topic){

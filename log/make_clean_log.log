@@ -1,0 +1,41 @@
+set -e; for d in lib client src; do make -C ${d} clean; done
+make[1]: Entering directory '/home/travis/mosquitto/lib'
+rm -f *.o libmosquitto.so.1 libmosquitto.so libmosquitto.a
+make -C cpp clean
+make[2]: Entering directory '/home/travis/mosquitto/lib/cpp'
+rm -f *.o libmosquittopp.so.1
+make[2]: Leaving directory '/home/travis/mosquitto/lib/cpp'
+make[1]: Leaving directory '/home/travis/mosquitto/lib'
+make[1]: Entering directory '/home/travis/mosquitto/client'
+rm -f *.o mosquitto_pub mosquitto_sub
+make[1]: Leaving directory '/home/travis/mosquitto/client'
+make[1]: Entering directory '/home/travis/mosquitto/src'
+rm -f *.o mosquitto mosquitto_passwd
+make[1]: Leaving directory '/home/travis/mosquitto/src'
+set -e; for d in man; do make -C ${d} clean; done
+make[1]: Entering directory '/home/travis/mosquitto/man'
+make[1]: Nothing to be done for 'clean'.
+make[1]: Leaving directory '/home/travis/mosquitto/man'
+make -C test clean
+make[1]: Entering directory '/home/travis/mosquitto/test'
+rm -f *.o random_client qos msgsps_pub msgsps_sub fake_user test_client *.pyc
+make -C lib clean
+make[2]: Entering directory '/home/travis/mosquitto/test/lib'
+make -C c clean
+make[3]: Entering directory '/home/travis/mosquitto/test/lib/c'
+rm -f *.test
+make[3]: Leaving directory '/home/travis/mosquitto/test/lib/c'
+make -C cpp clean
+make[3]: Entering directory '/home/travis/mosquitto/test/lib/cpp'
+rm -f *.test
+make[3]: Leaving directory '/home/travis/mosquitto/test/lib/cpp'
+make[2]: Leaving directory '/home/travis/mosquitto/test/lib'
+make -C broker clean
+make[2]: Entering directory '/home/travis/mosquitto/test/broker'
+rm -f *.vglog
+make -C c clean
+make[3]: Entering directory '/home/travis/mosquitto/test/broker/c'
+rm -f *.so *.test
+make[3]: Leaving directory '/home/travis/mosquitto/test/broker/c'
+make[2]: Leaving directory '/home/travis/mosquitto/test/broker'
+make[1]: Leaving directory '/home/travis/mosquitto/test'

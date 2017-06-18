@@ -20,6 +20,7 @@ Contributors:
 #include <config.h>
 #include <stdio.h>
 
+
 #ifdef WITH_WEBSOCKETS
 #  include <libwebsockets.h>
 
@@ -187,6 +188,8 @@ struct mosquitto_msg_store{
 	uint16_t mid;
 	uint8_t qos;
 	bool retain;
+    //travislu
+    struct timeval store_time;
 };
 
 struct mosquitto_client_msg{
@@ -527,4 +530,4 @@ void travislu_get_max_memory();
 void travislu_get_msg_store_count(struct mosquitto_db *db);
 void travislu_get_msgs_dropped();
 void travislu_get_client(struct mosquitto_db *db);
-
+void travislu_get_waiting_queue_time(struct mosquitto_msg_store *store);

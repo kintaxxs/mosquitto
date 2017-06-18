@@ -13,7 +13,6 @@ and the Eclipse Distribution License is available at
 Contributors:
    Roger Light - initial implementation and documentation.
 */
-
 #define _GNU_SOURCE
 
 #include <config.h>
@@ -358,7 +357,7 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 		if(fdcount == -1){
 			_mosquitto_log_printf(NULL, MOSQ_LOG_ERR, "Error in poll: %s.", strerror(errno));
 		}else{
-            travislu_print_all_info(db);
+            //travislu_print_all_info(db);
 			loop_handle_reads_writes(db, pollfds);
 
 			for(i=0; i<listensock_count; i++){
