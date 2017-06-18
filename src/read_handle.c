@@ -33,6 +33,7 @@ extern uint64_t g_pub_bytes_received;
 
 int mqtt3_packet_handle(struct mosquitto_db *db, struct mosquitto *context)
 {
+    travislu_whereis("mqtt3_packet_handle");
 	if(!context) return MOSQ_ERR_INVAL;
 
 	switch((context->in_packet.command)&0xF0){
@@ -74,6 +75,8 @@ int mqtt3_packet_handle(struct mosquitto_db *db, struct mosquitto *context)
 
 int mqtt3_handle_publish(struct mosquitto_db *db, struct mosquitto *context)
 {
+    travislu_whereis("mqtt3_handle_publish");
+    //travislu_printf(context->);
 	char *topic;
 	void *payload = NULL;
 	uint32_t payloadlen;

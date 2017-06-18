@@ -90,6 +90,8 @@ static void temp__expire_websockets_clients(struct mosquitto_db *db)
 
 int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int listensock_count, int listener_max)
 {
+    //printf("hello");
+    //travislu_whereis("mosquitto_main_loop");
 #ifdef WITH_SYS_TREE
 	time_t start_time = mosquitto_time();
 #endif
@@ -246,7 +248,7 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 				}else{
 					if((context->bridge->start_type == bst_lazy && context->bridge->lazy_reconnect)
 							|| (context->bridge->start_type == bst_automatic && now > context->bridge->restart_t)){
-						context->bridge->restart_t = 0;
+
 #if defined(__GLIBC__) && defined(WITH_ADNS)
 						if(context->adns){
 							/* Waiting on DNS lookup */
@@ -356,6 +358,7 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 		if(fdcount == -1){
 			_mosquitto_log_printf(NULL, MOSQ_LOG_ERR, "Error in poll: %s.", strerror(errno));
 		}else{
+            travislu_print_all_info(db);
 			loop_handle_reads_writes(db, pollfds);
 
 			for(i=0; i<listensock_count; i++){
@@ -472,6 +475,7 @@ void do_disconnect(struct mosquitto_db *db, struct mosquitto *context)
 
 static void loop_handle_reads_writes(struct mosquitto_db *db, struct pollfd *pollfds)
 {
+    //travislu_whereis("loop_handle_reads_writes");
 	struct mosquitto *context, *ctxt_tmp;
 	int err;
 	socklen_t len;

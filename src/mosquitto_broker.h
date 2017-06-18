@@ -513,3 +513,18 @@ struct libwebsocket_context *mosq_websockets_init(struct _mqtt3_listener *listen
 void do_disconnect(struct mosquitto_db *db, struct mosquitto *context);
 
 #endif
+
+/* ===================
+ * Travis function
+ * ===================*/
+
+void travislu_print_all_info(struct mosquitto_db *db);
+void travislu_whereis(char *str);
+void travislu_printf(char *str);
+void travislu_print_mos(struct mosquitto *mosq);
+void travislu_get_cur_memory();
+void travislu_get_max_memory();
+void travislu_get_msg_store_count(struct mosquitto_db *db);
+void travislu_get_msgs_dropped();
+void travislu_get_client(struct mosquitto_db *db);
+

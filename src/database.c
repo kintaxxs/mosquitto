@@ -145,6 +145,7 @@ void mosquitto__db_msg_store_add(struct mosquitto_db *db, struct mosquitto_msg_s
 
 void mosquitto__db_msg_store_remove(struct mosquitto_db *db, struct mosquitto_msg_store *store)
 {
+    travislu_whereis("mosquitto__db_msg_store_remove");
 	int i;
 
 	if(store->prev){
