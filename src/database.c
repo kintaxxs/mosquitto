@@ -213,6 +213,9 @@ static void _message_remove(struct mosquitto_db *db, struct mosquitto *context, 
 		return;
 	}
 
+    //travislu
+    travislu_get_sub_queue_time(*msg);
+
 	if((*msg)->store){
 		mosquitto__db_msg_store_deref(db, &(*msg)->store);
 	}
@@ -424,6 +427,10 @@ int mqtt3_db_message_insert(struct mosquitto_db *db, struct mosquitto *context, 
 	msg->dup = false;
 	msg->qos = qos;
 	msg->retain = retain;
+
+    //travislu
+    gettimeofday(&msg->store_time, NULL);
+
 	if(context->last_msg){
 		context->last_msg->next = msg;
 		context->last_msg = msg;

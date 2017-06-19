@@ -202,6 +202,8 @@ struct mosquitto_client_msg{
 	enum mosquitto_msg_direction direction;
 	enum mosquitto_msg_state state;
 	bool dup;
+    //travislu
+    struct timeval store_time;
 };
 
 struct _mosquitto_unpwd{
@@ -531,3 +533,4 @@ void travislu_get_msg_store_count(struct mosquitto_db *db);
 void travislu_get_msgs_dropped();
 void travislu_get_client(struct mosquitto_db *db);
 void travislu_get_waiting_queue_time(struct mosquitto_msg_store *store);
+void travislu_get_sub_queue_time(struct mosquitto_client_msg *msg);

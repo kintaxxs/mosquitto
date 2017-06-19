@@ -74,5 +74,16 @@ void travislu_get_waiting_queue_time(struct mosquitto_msg_store *store)
     gettimeofday(&end, NULL);
 
     waiting_time = (1000000 * (end.tv_sec - store->store_time.tv_sec) + (end.tv_usec - store->store_time.tv_usec)) / (float)1000;
-    _mosquitto_log_printf(NULL, MOSQ_LOG_INFO, "Topic : %s , The waiting time : %fms", store->topic, waiting_time);
+    _mosquitto_log_printf(NULL, MOSQ_LOG_INFO, "Topic : %s , The waiting time of db_queue: %fms", store->topic, waiting_time);
+}
+void travislu_get_sub_queue_time(struct mosquitto_client_msg *msg)
+{
+    struct timeval end;
+    float waiting_time;
+
+    gettimeofday(&end, NULL);
+
+    waiting_time = (1000000 * (end.tv_sec - msg->store_time.tv_sec) + (end.tv_usec - msg->store_time.tv_usec)) / (float)1000;
+    _mosquitto_log_printf(NULL, MOSQ_LOG_INFO, "Topic : %s , The waiting time of sub: %fms", (msg->store)->topic, waiting_time);
+
 }
