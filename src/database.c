@@ -24,6 +24,9 @@ Contributors:
 #include <send_mosq.h>
 #include <time_mosq.h>
 
+//travislu
+#include <string.h>
+
 static int max_inflight = 20;
 static int max_queued = 100;
 #ifdef WITH_SYS_TREE
@@ -147,6 +150,10 @@ void mosquitto__db_msg_store_remove(struct mosquitto_db *db, struct mosquitto_ms
 {
 	int i;
 
+	//Travis Lu
+	char *substr = "$SYS";
+	char *substr_result;
+
 	if(store->prev){
 		store->prev->next = store->next;
 		if(store->next){
@@ -159,6 +166,13 @@ void mosquitto__db_msg_store_remove(struct mosquitto_db *db, struct mosquitto_ms
 		}
 	}
 	db->msg_store_count--;
+
+	//Travis Lu
+	substr_result = strstr(store->topic, substr);
+
+	if (!substr_result)
+		travislu_get_waiting_queue_time(store);
+	//e
 
 	if(store->source_id) _mosquitto_free(store->source_id);
 	if(store->dest_ids){
@@ -197,12 +211,18 @@ void mosquitto__db_msg_store_deref(struct mosquitto_db *db, struct mosquitto_msg
 
 static void _message_remove(struct mosquitto_db *db, struct mosquitto *context, struct mosquitto_client_msg **msg, struct mosquitto_client_msg *last)
 {
+
+	travislu_whereis("_message_remove");
+
 	int i;
 	struct mosquitto_client_msg *tail;
 
 	if(!context || !msg || !(*msg)){
 		return;
 	}
+
+        //Travis Lu
+    		travislu_get_sub_queue_time(*msg);
 
 	if((*msg)->store){
 		mosquitto__db_msg_store_deref(db, &(*msg)->store);
@@ -219,6 +239,8 @@ static void _message_remove(struct mosquitto_db *db, struct mosquitto *context, 
 		}
 	}
 	context->msg_count--;
+
+
 	if((*msg)->qos > 0){
 		context->msg_count12--;
 	}
@@ -415,6 +437,19 @@ int mqtt3_db_message_insert(struct mosquitto_db *db, struct mosquitto *context, 
 	msg->dup = false;
 	msg->qos = qos;
 	msg->retain = retain;
+
+	//Travis Lu
+	gettimeofday(&msg->store_time, NULL);
+	char str_sub[32];
+	char temp[32];
+	unsigned long store_time_us = 1000000 * (msg->store_time.tv_sec) + msg->store_time.tv_usec;
+
+	sprintf(temp, "%lu", store_time_us);	
+
+	strcpy(str_sub, "SUB_QUEUE_");
+	strcat(str_sub, temp);
+	strcpy(msg->id, str_sub);
+	
 	if(context->last_msg){
 		context->last_msg->next = msg;
 		context->last_msg = msg;
@@ -548,6 +583,19 @@ int mqtt3_db_message_store(struct mosquitto_db *db, const char *source, uint16_t
 	temp->mid = 0;
 	temp->qos = qos;
 	temp->retain = retain;
+
+	//Travis Lu
+        gettimeofday(&temp->store_time, NULL);
+        char str_db[32];
+        char str_temp[32];
+        unsigned long store_time_us = 1000000 * (temp->store_time.tv_sec) + temp->store_time.tv_usec;
+
+        sprintf(str_temp, "%lu", store_time_us);
+
+	strcpy(str_db, "DB_QUEUE_");
+        strcat(str_db, str_temp);
+	strcpy(temp->id, str_db);
+
 	if(topic){
 		temp->topic = _mosquitto_strdup(topic);
 		if(!temp->topic){

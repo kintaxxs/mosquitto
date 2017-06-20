@@ -45,6 +45,7 @@ Contributors:
 #include <send_mosq.h>
 #include <time_mosq.h>
 #include <util_mosq.h>
+#include <stdlib.h>
 
 extern bool flag_reload;
 #ifdef WITH_PERSISTENCE
@@ -117,6 +118,17 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 	time_t last_timeout_check = 0;
 	char *id;
 
+/****************************************************************************/
+/* TravisLu	*/ 
+	unsigned long *mem_info;
+	unsigned long *time_info;
+	int mem_save_count = 0;
+	mem_info = (unsigned long *)malloc(sizeof(unsigned long) * 10000);
+	time_info = (unsigned long *)malloc(sizeof(unsigned long) * 10000);
+	int travis_interval = 1;
+	time_t travis_curr_time;
+	time_t travis_last_time = time(NULL);
+/****************************************************************************/
 #ifndef WIN32
 	sigemptyset(&sigblock);
 	sigaddset(&sigblock, SIGINT);
@@ -127,6 +139,13 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 	}
 
 	while(run){
+		travis_curr_time = time(NULL);
+		if ((travis_curr_time - travis_interval) >= travis_last_time) {
+			//travislu_save_curr_memory(time_info, mem_info, mem_save_count);
+			mem_save_count++;
+			travis_last_time = travis_curr_time;
+		}
+
 		mosquitto__free_disused_contexts(db);
 #ifdef WITH_SYS_TREE
 		if(db->config->sys_interval > 0){
@@ -356,6 +375,8 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 		if(fdcount == -1){
 			_mosquitto_log_printf(NULL, MOSQ_LOG_ERR, "Error in poll: %s.", strerror(errno));
 		}else{
+			//travislu_save_curr_memory(time_info, mem_info, mem_save_count);
+			//mem_save_count++;
 			loop_handle_reads_writes(db, pollfds);
 
 			for(i=0; i<listensock_count; i++){
@@ -417,6 +438,7 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 #endif
 	}
 
+	travislu_terminate(time_info, mem_info, mem_save_count);
 	if(pollfds) _mosquitto_free(pollfds);
 	return MOSQ_ERR_SUCCESS;
 }

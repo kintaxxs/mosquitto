@@ -155,7 +155,7 @@ static void _config_init_reload(struct mqtt3_config *config)
 	config->psk_file = NULL;
 	config->queue_qos0_messages = false;
 	config->retry_interval = 20;
-	config->sys_interval = 10;
+	config->sys_interval = 1;
 	config->upgrade_outgoing_qos = false;
 	if(config->auth_options){
 		for(i=0; i<config->auth_option_count; i++){

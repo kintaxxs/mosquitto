@@ -20,6 +20,9 @@ Contributors:
 #include <config.h>
 #include <stdio.h>
 
+//Travis Lu
+//#include <sys/time.h>
+
 #ifdef WITH_WEBSOCKETS
 #  include <libwebsockets.h>
 
@@ -187,6 +190,8 @@ struct mosquitto_msg_store{
 	uint16_t mid;
 	uint8_t qos;
 	bool retain;
+	struct timeval store_time;
+	char id[32];
 };
 
 struct mosquitto_client_msg{
@@ -199,6 +204,8 @@ struct mosquitto_client_msg{
 	enum mosquitto_msg_direction direction;
 	enum mosquitto_msg_state state;
 	bool dup;
+	struct timeval store_time;
+	char id[32];
 };
 
 struct _mosquitto_unpwd{
@@ -513,3 +520,15 @@ struct libwebsocket_context *mosq_websockets_init(struct _mqtt3_listener *listen
 void do_disconnect(struct mosquitto_db *db, struct mosquitto *context);
 
 #endif
+
+
+/* ============================================================
+ * Travislu related functions
+ * ============================================================ */
+
+void travislu_whereis(char *msg);
+void travislu_terminate(unsigned long *time_info, unsigned long *mem_info, int count);
+void travislu_get_curr_memory();
+void travislu_save_curr_memory(unsigned long *time_info, unsigned long *mem_info, int count);
+void travislu_get_waiting_queue_time(struct mosquitto_msg_store *store);
+void travislu_get_sub_queue_time(struct mosquitto_client_msg *msg);
