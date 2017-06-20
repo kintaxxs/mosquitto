@@ -141,7 +141,7 @@ int mosquitto_main_loop(struct mosquitto_db *db, mosq_sock_t *listensock, int li
 	while(run){
 		travis_curr_time = time(NULL);
 		if ((travis_curr_time - travis_interval) >= travis_last_time) {
-			//travislu_save_curr_memory(time_info, mem_info, mem_save_count);
+			travislu_save_curr_memory(time_info, mem_info, mem_save_count);
 			mem_save_count++;
 			travis_last_time = travis_curr_time;
 		}
